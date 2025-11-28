@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.zzu.membership.mapper.MembershipMapper">
+    
+    <select id="isUserMember" resultType="boolean">
+        <!-- 这里直接返回true或false作为模拟 -->
+        SELECT 
+            CASE 
+                WHEN #{userId} % 2 = 0 THEN true  
+                ELSE false 
+            END as isMember
+    </select>
+    
+</mapper>

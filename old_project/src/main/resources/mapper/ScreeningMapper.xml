@@ -38,9 +38,9 @@
                 AND DATE(s.show_time) = STR_TO_DATE(CONCAT(DATE_FORMAT(#{portalVo.date, jdbcType=DATE}, '%Y-%m-%d'), '
                 %'), '%Y-%m-%d %')
             </when>
-            <otherwise>
-                AND s.show_time > CURRENT_TIMESTAMP
-            </otherwise>
+<!--            <otherwise>-->
+<!--                AND s.show_time > CURRENT_TIMESTAMP-->
+<!--            </otherwise>-->
         </choose>
         ORDER BY s.show_time
     </select>
