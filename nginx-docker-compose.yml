@@ -1,0 +1,11 @@
+yaml
+version: '3.8'
+services:
+  nginx:
+    image: nginx:alpine
+    container_name: cinema-nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+      - ./online-booking-system/dist:/usr/share/nginx/html

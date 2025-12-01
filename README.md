@@ -213,10 +213,48 @@ src/
     - 确认mysql服务已启动：`systemctl status mysqld`
 
 4. **支付宝异步回调失败，订单状态未被更新为已支付**
-    - natapp映射的本地地址不是127.0.0.1:8080，未收到post请求。
-
+    
+- natapp映射的本地地址不是127.0.0.1:8080，未收到post请求。
+    
 5. **支付宝订单状态异常**
     - 支付宝商户订单号不能重复，在其他机器上使用时已被占用，在数据库中将ticket表自动递增tid加个几百或上千均可。如tid=43被占用，设置之后的tid从104开始递增，订单即可正常显示。
       ```sql
        ALTER TABLE ticket AUTO_INCREMENT = n;
       ```
+
+
+
+## 软件架构作业由于新增技术需添加的操作
+
+注意原来的项目结构已经变更，我创建了一个old_project模块，把原来的src目录移进去了
+
+1、启动项目前需下载nacos服务启动服务端[Nacos 快速开始 | Nacos 官网](https://nacos.io/docs/latest/quickstart/quick-start/?spm=5238cd80.2ef5001f.0.0.3f613b7c9rQUrs)
+
+2、访问nacos控制台http://localhost:8848/nacos，在dev环境添加2个配置文件： online-booking-system.yaml和membership-service.yaml，在old_project/src/main/resources/NacosConfig下
+
+3、完成以上操作可以正常启动项目
+
+## 🆕 新增技术栈
+
+### 🐳 Docker 容器化
+- 一键部署 MySQL + Redis + RabbitMQ 环境
+- 使用 `docker-compose up -d` 快速启动
+
+### 🌐 Nginx 反向代理
+- 静态资源服务和负载均衡
+- API请求代理和缓存优化
+
+### 🔄 RabbitMQ 消息队列
+- 异步处理订单消息，提升系统性能
+- 实现系统解耦和高可用性
+
+## 🚀 快速开始
+
+```bash
+# 启动所有依赖服务
+docker-compose up -d
+
+# 访问服务
+- 前端: http://localhost
+- RabbitMQ管理: http://localhost:15672 (guest/guest)
+- MySQL: localhost:3306, Redis: localhost:6379
