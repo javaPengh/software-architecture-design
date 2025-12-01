@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.zzu.mapper.HallMapper">
+
+    <resultMap id="BaseResultMap" type="hall">
+            <id property="hid" column="hid" jdbcType="INTEGER"/>
+            <result property="hname" column="hname" jdbcType="VARCHAR"/>
+            <result property="rowNum" column="row_num" jdbcType="INTEGER"/>
+            <result property="rowCapacity" column="row_capacity" jdbcType="INTEGER"/>
+            <result property="screenType" column="screen_type" jdbcType="VARCHAR"/>
+            <result property="version" column="version" jdbcType="INTEGER"/>
+            <result property="isDeleted" column="is_deleted" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        hid,hname,row_num,row_capacity,
+        screen_type,version,is_deleted
+    </sql>
+</mapper>
