@@ -14,12 +14,14 @@ public enum ResultCodeEnum {
     PASSWORD_ERROR(503,"passwordError"),
     NOTLOGIN(504,"notLogin"),
     USERNAME_USED(505,"userNameUsed"),
+    SYSTEM_ERROR(512, "systemError"), // <-- 在这里添加缺失的系统异常枚举
     TICKET_BOOKED_FAILED(506,"ticketBookedFailed"),
     TICKET_CANCEL_FAILED(507, "ticketCancelFailed"),
     UPDATE_FAILED(508, "updateFailed"),
     DELETE_FAILED(509, "deleteFailed"),
     CAPTCHA_ERROR(510, "captchaError"),
     SCREENING_CONFLICT(511, "screeningConflict");
+
     private final Integer code;
     private final String message;
     private ResultCodeEnum(Integer code, String message) {

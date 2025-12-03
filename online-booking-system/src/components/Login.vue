@@ -107,16 +107,26 @@ onUnmounted(() => {
 });
 
 const handleSubmit = async () => {
-  // 表单验证逻辑保持不变
   if (!form.captcha) {
     ElMessage.error('验证码不能为空');
     return;
   }
   try {
+    // login action 现在会更新 store 中的 isAdmin 状态
     await userStore.login(form.username, form.password, form.captcha);
     ElMessage.success('登录成功');
-    await router.push('/home');
+
+    // --- 关键修改：在这里进行判断 ---
+    if (userStore.isAdmin) {
+      // 如果是管理员，跳转到管理页面 (例如电影管理页)
+      await router.push('/movie');
+    } else {
+      // 如果是普通用户，跳转到首页
+      await router.push('/home');
+    }
+
   } catch (error) {
+    // 登录失败时刷新验证码
     captchaRef.value?.fetchCaptcha();
   }
 };
