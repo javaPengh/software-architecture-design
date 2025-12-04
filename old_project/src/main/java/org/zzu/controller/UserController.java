@@ -17,6 +17,7 @@ import org.zzu.pojo.LoginDto;
 import org.zzu.pojo.User;
 import org.zzu.service.UserService;
 import org.zzu.utils.*;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -26,6 +27,7 @@ import java.util.concurrent.TimeUnit;
 @RestController
 @RequestMapping("user")
 @CrossOrigin
+@Slf4j
 public class UserController {
     private final static String SESSION_KEY = "Captcha";
 
