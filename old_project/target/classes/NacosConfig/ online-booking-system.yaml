@@ -1,54 +1,12 @@
-# server配置
-server:
-  port: 8080
-  servlet:
-    context-path: /
-
-# Feign配置
-feign:
-  client:
-    config:
-      default:
-        connect-timeout: 5000
-        read-timeout: 5000
-        logger-level: basic
-  compression:
-    request:
-      enabled: true
-      mime-types: text/xml,application/xml,application/json
-      min-request-size: 2048
-    response:
-      enabled: true
-
-# application.yml
-logging:
-  level:
-    org.zzu.controller: INFO
-    org.zzu.utils: INFO  # 也打开切面类的日志
-  pattern:
-    console: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"
-    file: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"
-  file:
-    name: logs/app.log  # 日志文件路径
-
-
-
-# 原有的数据库、JWT等配置将会从Nacos配置中心获取
 # 数据源配置
 spring:
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/booking
-    username: root
-    password: '12345678'
-
-  data:
-    redis:
-      host: localhost     # Redis 服务器地址，本地通常是 localhost
-      port: 6379          # Redis 服务器端口，默认是 6379
-      password:           # 如果您的 Redis 设置了密码，请在这里填写
-      database: 0         # 使用的 Redis 数据库索引，默认是 0
+    druid:
+      url: jdbc:mysql://localhost:3306/test
+      username: root
+      password: '123456'
+      driver-class-name: com.mysql.cj.jdbc.Driver
 
 # MyBatis Plus配置
 mybatis-plus:

@@ -20,20 +20,6 @@ feign:
     response:
       enabled: true
 
-# application.yml
-logging:
-  level:
-    org.zzu.controller: INFO
-    org.zzu.utils: INFO  # 也打开切面类的日志
-  pattern:
-    console: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"
-    file: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"
-  file:
-    name: logs/app.log  # 日志文件路径
-
-
-
-# 原有的数据库、JWT等配置将会从Nacos配置中心获取
 # 数据源配置
 spring:
   datasource:
