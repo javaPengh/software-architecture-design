@@ -9,6 +9,7 @@ import com.alipay.api.request.AlipayTradePagePayRequest;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.zzu.config.AlipayConfig;
 import org.zzu.mapper.TicketMapper;
 import org.zzu.pojo.Ticket;
@@ -28,6 +29,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/alipay")
 @CrossOrigin
+@Slf4j
 public class AlipayController {
 
     private static final String GATEWAY_URL = "https://openapi-sandbox.dl.alipaydev.com/gateway.do";
@@ -44,6 +46,7 @@ public class AlipayController {
 
     @GetMapping("/pay") // ?subject=电影票&traceNo=111&totalAmount=45
     public void pay(Alipay aliPay, HttpServletResponse httpResponse) throws Exception {
+
         // 1. 创建Client，通用SDK提供的Client，负责调用支付宝的API
         AlipayClient alipayClient = new DefaultAlipayClient(GATEWAY_URL, aliPayConfig.getAppId(),
                 aliPayConfig.getAppPrivateKey(), FORMAT, CHARSET, aliPayConfig.getAlipayPublicKey(), SIGN_TYPE);
@@ -56,6 +59,7 @@ public class AlipayController {
         } catch (AlipayApiException e) {
             e.printStackTrace();
         }
+
         httpResponse.setContentType("text/html;charset=" + CHARSET);
         httpResponse.getWriter().write(form);// 直接将完整的表单html输出到页面
         httpResponse.getWriter().flush();

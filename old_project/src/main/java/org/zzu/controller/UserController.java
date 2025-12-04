@@ -5,6 +5,7 @@ import cn.hutool.captcha.LineCaptcha;
 import com.alibaba.druid.util.StringUtils;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.zzu.pojo.ChangePasswordDto;
 import org.zzu.pojo.LoginDto;
 import org.zzu.pojo.User;
@@ -25,6 +26,7 @@ import java.io.IOException;
 @RestController
 @RequestMapping("user")
 @CrossOrigin
+@Slf4j
 public class UserController {
     private final static String SESSION_KEY = "Captcha";
     @Autowired
@@ -34,6 +36,9 @@ public class UserController {
 
     @PostMapping("login")
     public Result login(@RequestBody LoginDto loginDto, HttpServletRequest request) {
+
+
+
         String realCaptcha = request.getHeader(SESSION_KEY);
         String captcha = loginDto.getCaptcha();
         if (!captcha.equalsIgnoreCase(realCaptcha)) {

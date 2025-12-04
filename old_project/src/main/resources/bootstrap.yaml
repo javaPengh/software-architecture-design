@@ -13,13 +13,13 @@ spring:
       discovery:
         enabled: ${nacos.enabled:false}
         server-addr: ${NACOS_HOST:localhost}:${NACOS_PORT:8848}
-        namespace: 7dfb20ec-64c1-4e8a-801d-9dc1fa067248
+        namespace: 5fe456be-bc0e-4480-b609-a4e4f1c743d4
       config:
         enabled: ${nacos.enabled:false}
         server-addr: ${spring.cloud.nacos.discovery.server-addr}
         file-extension: yaml
         group: DEFAULT_GROUP
-        namespace: 7dfb20ec-64c1-4e8a-801d-9dc1fa067248
+        namespace: 5fe456be-bc0e-4480-b609-a4e4f1c743d4
         import-check:
           enabled: false
     # Sentinel 配置
