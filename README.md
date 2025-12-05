@@ -233,3 +233,27 @@ src/
 2、访问nacos控制台http://localhost:8848/nacos，在dev环境添加2个配置文件： online-booking-system.yaml和membership-service.yaml，在old_project/src/main/resources/NacosConfig下
 
 3、完成以上操作可以正常启动项目
+## 🆕 新增技术栈
+
+### 🐳 Docker 容器化
+需要先下载docker并启动即可使用
+- 一键部署 MySQL + Redis + RabbitMQ + Nacos
+- 使用 `docker-compose up -d` 快速启动
+
+### 🌐 Nginx 反向代理
+- 静态资源服务和 API 请求代理
+- 负载均衡和缓存优化
+
+### 🔔 RabbitMQ 消息队列
+- 异步处理订单消息
+- 实现系统解耦和高可用性
+
+## 🚀 快速开始
+```bash
+# 启动所有依赖服务
+docker-compose up -d
+
+# 访问服务
+- 前端: http://localhost:5173
+- RabbitMQ管理: http://localhost:15672 (guest/guest)
+- 数据库: localhost:3306 (root/123456)
