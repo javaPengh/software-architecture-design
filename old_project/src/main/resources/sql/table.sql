@@ -196,7 +196,7 @@ CREATE TABLE `user`  (
 -- ----------------------------
 INSERT INTO `user` VALUES (1, 'admin', '3af92164920998eec3c415a361c32be2', 'admin', '12345678910', 'admin', '2024-08-27 10:20:05', 6, 0);
 INSERT INTO `user` VALUES (2, 'user', '3af92164920998eec3c415a361c32be2', 'Test666...', '19711111111', 'normal', '2024-08-27 10:26:02', 1, 0);
-
+ALTER TABLE `user` ADD COLUMN `user_pic` VARCHAR(255) COMMENT 'User profile picture path';
 -- ----------------------------
 -- Table structure for ticket
 -- ----------------------------

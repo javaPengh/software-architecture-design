@@ -39,19 +39,19 @@ spring:
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/onlinebooking_system  
+    url: jdbc:mysql://desktop-7nla9nf.taila5d3f3.ts.net:3306/onlinebooking_system
     username: root
-    password: '12345678'
+    password: '123456'
 
   rabbitmq:
-    host: localhost
+    host: desktop-7nla9nf.taila5d3f3.ts.net
     port: 5672
     username: guest
     password: guest
 
   data:
     redis:
-      host: localhost     # Redis 服务器地址，本地通常是 localhost
+      host: desktop-7nla9nf.taila5d3f3.ts.net     # Redis 服务器地址，本地通常是 localhost
       port: 6379          # Redis 服务器端口，默认是 6379
       password:           # 如果您的 Redis 设置了密码，请在这里填写
       database: 0         # 使用的 Redis 数据库索引，默认是 0

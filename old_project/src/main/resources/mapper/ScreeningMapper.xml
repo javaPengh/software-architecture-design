@@ -25,9 +25,9 @@
     <select id="getScreeningDtoList" resultType="screeningDto">
         SELECT s.sid, m.mname, h.hname, s.show_time, s.end_time, s.price, s.seat_count, s.remaining_seats,
         h.row_capacity
-        FROM Screening s
-        JOIN Movie m ON s.mid = m.mid
-        JOIN Hall h ON s.hid = h.hid
+        FROM screening s
+        JOIN movie m ON s.mid = m.mid
+        JOIN hall h ON s.hid = h.hid
         WHERE
         s.is_deleted = 0 AND remaining_seats > 0
         <if test="portalVo.keyword != null and portalVo.keyword.length() > 0">
@@ -46,7 +46,7 @@
     </select>
     <select id="showScreeningList" resultType="screening">
         SELECT *
-        FROM Screening s
+        FROM screening s
         WHERE
         s.is_deleted = 0
         <if test="portalVo.id != null">
@@ -60,8 +60,8 @@
     </select>
     <select id="checkConflict" resultType="int">
         SELECT COUNT(*)
-        FROM Screening s
-        JOIN Movie m ON #{entity.mid} = m.mid
+        FROM screening s
+        JOIN movie m ON #{entity.mid} = m.mid
         WHERE s.is_deleted = 0
         <if test="entity.sid != null">
             AND s.sid != #{entity.sid}

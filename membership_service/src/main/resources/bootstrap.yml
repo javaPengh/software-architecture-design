@@ -1,19 +1,27 @@
+# Nacos开关配置
+nacos:
+  enabled: true  # 设置为true启用Nacos，false禁用Nacos
+
 spring:
   application:
     name: membership-service
+  profiles:
+    active: dev
   config:
-    import: optional:nacos:${spring.application.name}.yaml
+    import: optional:nacos:datasource.yml
   cloud:
     nacos:
+      enabled: ${nacos.enabled:false}  # 使用开关控制
       discovery:
-        server-addr: ${NACOS_HOST:localhost}:${NACOS_PORT:8848}
-        namespace: 7dfb20ec-64c1-4e8a-801d-9dc1fa067248
+        enabled: ${nacos.enabled:false}
+        server-addr: ${NACOS_HOST:desktop-7nla9nf.taila5d3f3.ts.net}:${NACOS_PORT:8848}
+        namespace: 7c7a284f-7987-484f-b5b1-8ab31111f2b0
       config:
+        enabled: ${nacos.enabled:false}
         server-addr: ${spring.cloud.nacos.discovery.server-addr}
         file-extension: yaml
         group: DEFAULT_GROUP
-        namespace: 7dfb20ec-64c1-4e8a-801d-9dc1fa067248
-        # 禁用配置导入检查
+        namespace: 7c7a284f-7987-484f-b5b1-8ab31111f2b0
         import-check:
           enabled: false
     # Sentinel 配置
@@ -21,6 +29,5 @@ spring:
       transport:
         dashboard: localhost:7070  # Sentinel 控制台地址
       eager: true  # 立即加载 Sentinel 控制台
-      filter:
-        enabled: false  # 关闭 Sentinel 的 Web 拦截
-      web-context-unify: false
+    loadbalancer:
+      enabled: true
