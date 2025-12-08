@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>电影票房变化可视化</title>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+        }
+        body {
+            background: linear-gradient(135deg, #409eff, #409eff);
+            color: #409eff;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        header {
+            text-align: center;
+            padding: 20px 0 30px;
+        }
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            background: linear-gradient(90deg, #ff7e5f, #feb47b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+        .subtitle {
+            font-size: 1.1rem;
+            opacity: 0.8;
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+        .chart-container {
+            background: rgba(30, 40, 50, 0.7);
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            margin-bottom: 30px;
+        }
+        #chart {
+            width: 100%;
+            height: 600px;
+        }
+        .info-panel {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .info-card {
+            flex: 1;
+            min-width: 250px;
+            background: rgba(40, 50, 60, 0.6);
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        .info-card h3 {
+            color: #feb47b;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .stats {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 15px;
+        }
+        .stat {
+            text-align: center;
+        }
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #ff7e5f;
+        }
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.7;
+        }
+        footer {
+            text-align: center;
+            margin-top: 30px;
+            padding: 20px;
+            font-size: 0.9rem;
+            opacity: 0.7;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+            #chart {
+                height: 400px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>电影票房变化趋势</h1>
+            <p class="subtitle">数据为模拟数据，仅用于演示目的。</p>
+        </header>
+        
+        <div class="chart-container">
+            <div id="chart"></div>
+        </div>
+        
+        <div class="info-panel">
+            <div class="info-card">
+                <h3 id="movieTitle">票房数据说明</h3>
+                <p>本图表展示了模拟的电影票房数据变化趋势。横轴为时间，纵轴为票房收入（万元）。</p>
+                <div class="stats">
+                    <div class="stat">
+                        <div class="stat-value">2.4亿</div>
+                        <div class="stat-label">最高单日票房</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">126天</div>
+                        <div class="stat-label">数据周期</div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        
+        <footer>
+            <p>数据可视化展示 | 使用ECharts绘制 | 模拟数据仅供参考</p>
+        </footer>
+    </div>
+
+    <script>
+        function getQueryParam(name) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(name);
+        }
+
+        // 获取电影名称参数，如果没有则使用默认值"电影"
+        function getMovieTitle() {
+            const movieParam = getQueryParam('movie');
+            // 对参数进行解码并处理，如果没有参数则返回默认值
+            return movieParam ? decodeURIComponent(movieParam) : '电影';
+        }
+
+        // 页面加载完成后更新标题
+        document.addEventListener('DOMContentLoaded', function() {
+            const movieTitle = getMovieTitle();
+            const titleElement = document.getElementById('movieTitle');
+            
+            if (titleElement) {
+                titleElement.textContent = `${movieTitle}票房数据说明`;
+            }
+            
+            // 这里可以继续使用movieTitle变量进行其他操作
+            console.log('接收到的电影名称:', movieTitle);
+        });
+
+        
+        // 初始化ECharts实例
+        const chartDom = document.getElementById('chart');
+        const myChart = echarts.init(chartDom);
+        
+        // 生成模拟电影票房数据
+        let base = +new Date(2019, 8, 1); // 2019年9月1日
+        let oneDay = 24 * 3600 * 1000;
+        let date = [];
+        let data = [ Math.floor(1000 + Math.random() * 200)]; // 初始票房1200万
+        
+        // 模拟电影票房变化：上映初期增长，中期达到峰值，后期逐渐下降
+        for (let i = 1; i < 126; i++) {
+            let now = new Date(base += oneDay);
+            date.push([now.getFullYear(), now.getMonth() + 1, now.getDate()].join('/'));
+            
+            // 模拟票房变化：初期快速增长，中期波动，后期缓慢下降
+            let change;
+            if (i < 30) {
+                // 上映初期：快速增长
+                change = Math.floor(Math.random() * 200 + 100);
+            } else if (i < 70) {
+                // 上映中期：波动增长
+                change = Math.floor(Math.random() - 0.3) * 150;
+            } else if (i < 100) {
+                // 上映后期：缓慢下降
+                change = -Math.floor(Math.random()) * 100;
+            } else {
+                // 尾声：稳定低水平
+                change = Math.floor(Math.random() - 0.7) * 50;
+            }
+            
+            // 确保票房不为负
+            let newValue = data[i - 1] + change;
+            data.push(Math.max(newValue, 100));
+        }
+        
+        // 配置图表选项
+        const option = {
+            tooltip: {
+                trigger: 'axis',
+                position: function (pt) {
+                    return [pt[0], '10%'];
+                },
+                formatter: function(params) {
+                    return params[0].name + '<br/>' + 
+                           '票房: <span style="color:#ff7e5f;font-weight:bold">' + 
+                           params[0].value.toLocaleString() + ' 万元</span>';
+                }
+            },
+            title: {
+                left: 'center',
+                text: '电影票房变化趋势 (2019-2020)',
+                textStyle: {
+                    color: '#e0e0e0',
+                    fontSize: 20
+                }
+            },
+            toolbox: {
+                feature: {
+                    dataZoom: {
+                        yAxisIndex: 'none'
+                    },
+                    restore: {},
+                    saveAsImage: {
+                        title: '保存为图片',
+                        pixelRatio: 2
+                    }
+                },
+                iconStyle: {
+                    borderColor: '#e0e0e0'
+                }
+            },
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '10%',
+                top: '15%',
+                containLabel: true
+            },
+            xAxis: {
+                type: 'category',
+                boundaryGap: false,
+                data: date,
+                axisLine: {
+                    lineStyle: {
+                        color: '#e0e0e0'
+                    }
+                },
+                axisLabel: {
+                    color: '#a0a0a0'
+                }
+            },
+            yAxis: {
+                type: 'value',
+                boundaryGap: [0, '20%'],
+                name: '票房 (万元)',
+                nameTextStyle: {
+                    color: '#a0a0a0'
+                },
+                axisLine: {
+                    lineStyle: {
+                        color: '#e0e0e0'
+                    }
+                },
+                axisLabel: {
+                    color: '#a0a0a0',
+                    formatter: function(value) {
+                        if (value >= 10000) {
+                            return (value / 10000).toFixed(1) + '亿';
+                        }
+                        return value;
+                    }
+                },
+                splitLine: {
+                    lineStyle: {
+                        color: 'rgba(255, 255, 255, 0.1)',
+                        type: 'dashed'
+                    }
+                }
+            },
+            dataZoom: [
+                {
+                    type: 'inside',
+                    start: 0,
+                    end: 30
+                },
+                {
+                    type: 'slider',
+                    start: 0,
+                    end: 30,
+                    height: 20,
+                    bottom: 10,
+                    borderColor: 'transparent',
+                    handleStyle: {
+                        color: '#ff7e5f'
+                    },
+                    textStyle: {
+                        color: '#e0e0e0'
+                    }
+                }
+            ],
+            series: [
+                {
+                    name: '电影票房',
+                    type: 'line',
+                    smooth: true,
+                    symbol: 'circle',
+                    symbolSize: 6,
+                    sampling: 'lttb',
+                    itemStyle: {
+                        color: '#ff7e5f'
+                    },
+                    lineStyle: {
+                        color: '#ff7e5f',
+                        width: 3
+                    },
+                    areaStyle: {
+                        color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                            {
+                                offset: 0,
+                                color: 'rgba(255, 126, 95, 0.6)'
+                            },
+                            {
+                                offset: 1,
+                                color: 'rgba(254, 180, 123, 0.2)'
+                            }
+                        ])
+                    },
+                    markPoint: {
+                        data: [
+                            { type: 'max', name: '最高票房' },
+                            { type: 'min', name: '最低票房' }
+                        ],
+                        label: {
+                            color: '#fff',
+                            backgroundColor: 'rgba(0, 0, 0, 0.7)',
+                            padding: [5, 10],
+                            borderRadius: 4
+                        }
+                    },
+                    data: data
+                }
+            ]
+        };
+
+        // 使用配置项和数据显示图表
+        myChart.setOption(option);
+        
+        // 响应窗口大小变化
+        window.addEventListener('resize', function() {
+            myChart.resize();
+        });
+    function updateMaxBoxOffice() {
+    const maxBoxOffice = Math.max(...data);
+    let formattedValue;
+    
+    if (maxBoxOffice >= 10000) {
+        formattedValue = (maxBoxOffice / 10000).toFixed(1) + '亿';
+    } else {
+        formattedValue = maxBoxOffice.toLocaleString() + '万';
+    }
+    
+    // 更新页面显示
+    document.querySelector('.stat-value').textContent = formattedValue;
+}
+
+// 在生成数据后立即调用一次
+updateMaxBoxOffice();
+    </script>
+</body>
+</html>

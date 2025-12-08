@@ -23,7 +23,14 @@
     <div class="table-center">
       <el-table :data="sDtoList.list" border table-layout="auto">
         <el-table-column prop="sid" label="放映场次ID" ></el-table-column>
-        <el-table-column prop="mname" label="电影姓名" ></el-table-column>
+        <el-table-column label="电影姓名">
+          <template #default="scope">
+            {{ scope.row.mname }}
+            <el-button type="primary" size="small" @click="openChart(scope.row.mname)" style="margin-left: 8px">
+              查看票房
+            </el-button>
+          </template>
+        </el-table-column>
         <el-table-column prop="hname" label="影厅名称" ></el-table-column>
         <el-table-column prop="showTime" label="放映开始时间" >
           <template #default="scope">
@@ -69,12 +76,21 @@
 
 <script setup>
 import { ref, onMounted, reactive, computed } from 'vue';
+import { useRouter } from 'vue-router';
 import request from '../axios/axios.js';
 import { useUserStore } from '../store/userStore.js';
 import { ElMessage } from 'element-plus';
 
+// 打开票房图表
+const openChart = (movieName) => {
+  // 编码电影名称并打开新窗口
+  const encodedName = encodeURIComponent(movieName);
+  window.open(`/echart_test.html?movie=${encodedName}`, '_blank');
+};
+
 const userStore = useUserStore();
 const dialogFormVisible = ref(false);
+const router = useRouter(); // 添加路由实例
 
 const sDtoList = ref({
   totalSize: 0,
@@ -101,7 +117,13 @@ async function fetchData() {
 }
 
 onMounted(() => {
-  fetchData();
+  if (!userStore.token) {
+    ElMessage.warning('请先登录');
+    // 这里可以添加重定向到登录页面的逻辑
+    // router.push('/login');
+  } else {
+    fetchData();
+  }
 });
 
 const shortcuts = [

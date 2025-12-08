@@ -38,7 +38,14 @@
     <div class="table-center">
       <el-table :data="movieList.list" border table-layout="auto">
         <el-table-column prop="mid" label="电影ID"></el-table-column>
-        <el-table-column prop="mname" label="电影名"></el-table-column>
+        <el-table-column label="电影名">
+          <template #default="scope">
+            {{ scope.row.mname }}
+            <el-button type="primary" size="small" @click="openChart(scope.row.mname)" style="margin-left: 8px">
+              查看票房
+            </el-button>
+          </template>
+        </el-table-column>
         <el-table-column prop="director" label="导演"></el-table-column>
         <el-table-column prop="releaseDate" label="发行日期">
           <template #default="scope">
