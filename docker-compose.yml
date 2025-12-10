@@ -112,6 +112,7 @@ services:
     environment:
       # 核心：告诉服务 Nacos 的地址
       - NACOS_SERVER_ADDR=nacos:8848 # 使用 Docker Compose 的服务名
+      - SPRING_CLOUD_SENTINEL_TRANSPORT_DASHBOARD=sentinel:8858
     depends_on:
       - nacos
       - mysql
@@ -126,7 +127,7 @@ services:
       - "8080:8080"
     environment:
       - NACOS_SERVER_ADDR=nacos:8848
-      - SPRING_CLOUD_SENTINEL_TRANSPORT_DASHBOARD=sentinel-dashboard:8858
+      - SPRING_CLOUD_SENTINEL_TRANSPORT_DASHBOARD=sentinel:8858
     depends_on:
       - nacos
       - mysql
