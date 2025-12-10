@@ -1,6 +1,8 @@
 // src/main/java/org.zzu/config/SecurityConfig.java
 package org.zzu.config;
 
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpMethod;
 import org.zzu.fliter.JwtAuthenticationFilter;
 import org.zzu.utils.MD5Util;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +20,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity
+@Slf4j
 public class SecurityConfig {
 
     @Autowired
@@ -52,6 +55,7 @@ public class SecurityConfig {
      */
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        log.info("✅ SecurityConfig is being loaded!"); // ← 加这行
         http
                 // 1. 禁用csrf，因为我们使用JWT，不需要csrf保护
                 .csrf(AbstractHttpConfigurer::disable)
@@ -59,9 +63,23 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 // 3. 配置URL的授权规则
                 .authorizeHttpRequests(auth -> auth
-                        // 放行登录、注册、检查用户名、获取验证码接口
-                        .requestMatchers("/user/login", "/user/register", "/user/checkUsername/**", "/user/captcha").permitAll()
-                        // 其他所有请求都需要认证
+                        // 放行公共接口
+                        .requestMatchers(
+                                "/user/login",
+                                "/user/register",
+                                "/user/checkUsername/**",
+                                "/user/captcha",
+                                "/user/checkPing",
+                                "/api/public/**",
+                                "/swagger-ui/**",
+                                "/v3/api-docs/**",
+                                "/static/**"
+                        ).permitAll()
+                        // 放行所有OPTIONS请求
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                        // 管理员接口
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
+                        // 需要认证的接口
                         .anyRequest().authenticated()
                 )
                 // 4. 将我们自定义的JWT过滤器添加到UsernamePasswordAuthenticationFilter之前

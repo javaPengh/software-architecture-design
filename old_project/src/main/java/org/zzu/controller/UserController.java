@@ -137,6 +137,9 @@ public class UserController {
     @GetMapping("captcha")
     @CrossOrigin(origins = "*", exposedHeaders = SESSION_KEY)
     public void generateCaptcha(HttpServletResponse response) throws IOException {
+        log.info("✅ 收到验证码请求，Session ID");
+        // 1. 设置响应头为图片类型
+        response.setContentType("image/png");
         LineCaptcha captcha = CaptchaUtil.createLineCaptcha(100, 30, 4, 40);
         // 注意：将验证码存储到 Redis 会是更好的实践，但这里为了保持简单，还是用 Header
         response.addHeader(SESSION_KEY, captcha.getCode());
@@ -144,4 +147,9 @@ public class UserController {
     }
 
     // 合并点 2：GitHub 版本中的 checkLogin 方法被删除，因为新架构下由 JWT 过滤器实现
+
+    @GetMapping("checkPing")
+    public Result checkPing() {
+        return Result.ok("请求通的");
+    }
 }

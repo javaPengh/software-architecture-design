@@ -1,4 +1,4 @@
-version: '3.8'
+# 在 services: 顶部添加 healthcheck
 services:
   mysql:
     image: mysql:8.0
@@ -7,7 +7,7 @@ services:
       MYSQL_ROOT_PASSWORD: 123456
       MYSQL_DATABASE: onlinebooking_system
     ports:
-      - "3306:3306"
+      - "3307:3306"
     volumes:
       - mysql_data:/var/lib/mysql
 
@@ -28,6 +28,12 @@ services:
       - "15672:15672"
 
   nacos:
+    # ...
+    healthcheck:
+      test: [ "CMD-SHELL", "curl -f http://localhost:8848/nacos/v1/console/server/state || exit 1" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     image: nacos/nacos-server:v2.4.3  # 强烈建议锁死版本，不要用 latest
     container_name: cinema-nacos
     environment:
@@ -46,7 +52,98 @@ services:
       - "9849:9849"
     restart: always
 
+  sentinel:
+    image: bladex/sentinel-dashboard:1.8.6 # 使用官方稳定镜像
+    container_name: cinema-sentinel
+    environment:
+      # Sentinel 控制台的登录用户名和密码
+      - SENTINEL_DASHBOARD_USERNAME=sentinel
+      - SENTINEL_DASHBOARD_PASSWORD=sentinel
+    ports:
+      # 映射主机端口 8858 到容器的 8080 端口，用于访问控制台
+      - "8858:8080"
+    restart: always
+
+  zookeeper:
+    image: zookeeper:3.8
+    container_name: cinema-zookeeper
+    ports:
+      - "2181:2181"
+    restart: always
+
+  elasticsearch:
+    image: elasticsearch:8.10.2 # 建议选择一个稳定版本，注意内存要求
+    container_name: cinema-es
+    environment:
+      - discovery.type=single-node
+      # 必须分配足够的内存，否则容器会启动失败
+      - ES_JAVA_OPTS=-Xms512m -Xmx512m
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    ports:
+      - "9200:9200" # HTTP 端口
+      - "9300:9300" # 节点间通信端口
+    restart: always
+
+  prometheus:
+    image: prom/prometheus:v2.47.1
+    container_name: cinema-prometheus
+    ports:
+      - "9090:9090"
+    restart: always
+
+  grafana:
+    image: grafana/grafana:10.1.5
+    container_name: cinema-grafana
+    ports:
+      - "3000:3000"
+    restart: always
+
+  # 1. 成员服务 (后端)
+  membership_service:
+    build:
+      context: . # 指定 Dockerfile 所在目录
+      dockerfile: ./membership_service/Dockerfile.membership
+    container_name: cinema-member
+    ports:
+      - "8081:8081"
+    environment:
+      # 核心：告诉服务 Nacos 的地址
+      - NACOS_SERVER_ADDR=nacos:8848 # 使用 Docker Compose 的服务名
+    depends_on:
+      - nacos
+      - mysql
+
+  # 2. 旧项目服务 (后端)
+  old_project:
+    build:
+      context: .
+      dockerfile: ./old_project/Dockerfile.oldproject
+    container_name: cinema-old-project
+    ports:
+      - "8080:8080"
+    environment:
+      - NACOS_SERVER_ADDR=nacos:8848
+    depends_on:
+      - nacos
+      - mysql
+
+  # 3. Nginx (前端)
+  nginx:
+    image: nginx:alpine
+    container_name: cinema-nginx
+    ports:
+      - "80:80"
+    volumes:
+      # 确保路径正确：从 Docker Compose 文件位置的相对路径
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+      # 核心：挂载前端打包后的 dist 目录
+      - ./online-booking-system/dist:/usr/share/nginx/html
+    depends_on:
+      - membership_service
+      - old_project
+
 volumes:
   mysql_data:
-  nacos_logs:
-  nacos_data:

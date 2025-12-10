@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import org.zzu.membership.service.MembershipService;
 
 @RestController
-@RequestMapping("/api/membership")
+@RequestMapping("/membership")
 public class MembershipController {
 
     private final MembershipService membershipService;
@@ -41,5 +41,10 @@ public class MembershipController {
     public ResponseEntity<Boolean> checkMembershipFallback(Long userId, Throwable e) {
         // 返回降级后的默认值，这里返回false表示非会员
         return ResponseEntity.ok(false);
+    }
+
+    @GetMapping("/checkPing")
+    public ResponseEntity<String> checkPing() {
+        return ResponseEntity.ok("请求通的");
     }
 }

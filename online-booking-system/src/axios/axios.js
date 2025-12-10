@@ -5,7 +5,7 @@ import "nprogress/nprogress.css";
 import {ElMessage} from "element-plus";
 //  创建instance实例
 const instance = axios.create({
-    baseURL:'http://localhost:8080/'
+    baseURL:'/api/'
 })
 window.captcha = null; // 初始化为空
 var captcha = '';
