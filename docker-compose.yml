@@ -60,8 +60,8 @@ services:
       - SENTINEL_DASHBOARD_USERNAME=sentinel
       - SENTINEL_DASHBOARD_PASSWORD=sentinel
     ports:
-      # 映射主机端口 8858 到容器的 8080 端口，用于访问控制台
-      - "8858:8080"
+      # 映射主机端口 8858 到容器的 8858 端口，用于访问控制台
+      - "8858:8858"
     restart: always
 
   zookeeper:

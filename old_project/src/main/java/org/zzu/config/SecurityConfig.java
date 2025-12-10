@@ -55,7 +55,6 @@ public class SecurityConfig {
      */
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        log.info("✅ SecurityConfig is being loaded!"); // ← 加这行
         http
                 // 1. 禁用csrf，因为我们使用JWT，不需要csrf保护
                 .csrf(AbstractHttpConfigurer::disable)
