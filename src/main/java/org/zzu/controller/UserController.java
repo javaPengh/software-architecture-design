@@ -3,6 +3,7 @@ package org.zzu.controller;
 import cn.hutool.captcha.CaptchaUtil;
 import cn.hutool.captcha.LineCaptcha;
 import com.alibaba.druid.util.StringUtils;
+import io.micrometer.core.instrument.MeterRegistry;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.zzu.pojo.ChangePasswordDto;
@@ -26,12 +27,14 @@ import java.io.IOException;
 @RequestMapping("user")
 @CrossOrigin
 public class UserController {
+
     private final static String SESSION_KEY = "Captcha";
     @Autowired
     private UserService userService;
     @Autowired
     private JwtHelper jwtHelper;
-
+    @Autowired
+    private MeterRegistry meterRegistry;
     @PostMapping("login")
     public Result login(@RequestBody LoginDto loginDto, HttpServletRequest request) {
         String realCaptcha = request.getHeader(SESSION_KEY);
@@ -39,8 +42,17 @@ public class UserController {
         if (!captcha.equalsIgnoreCase(realCaptcha)) {
             return Result.build(null, ResultCodeEnum.CAPTCHA_ERROR);
         }
+        // 调用userService.login方法
+        Result result = userService.login(loginDto);
+
+        // 如果登录成功，记录登录次数
+        if (result.getCode() == 200) {
+            meterRegistry.counter("user.login.success").increment();
+        }
+
         return userService.login(loginDto);
     }
+
 
     @GetMapping("getUserInfo")
     public Result userInfo(@RequestHeader String token) {
@@ -85,4 +97,5 @@ public class UserController {
         captcha.write(response.getOutputStream());
         response.addHeader(SESSION_KEY, captcha.getCode());
     }
+
 }

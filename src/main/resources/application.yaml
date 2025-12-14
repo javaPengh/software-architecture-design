@@ -11,8 +11,12 @@ spring:
       # 192.168.44.135:3306要修改为自己数据库对应的ip地址和端口，onlinebooking_system是数据库名
       url: jdbc:mysql://localhost:3306/test
       username: root # 改成你自己的账户名
-      password: '123456' # 改成你自己的密码
+      password: 20010120 # 改成你自己的密码
       driver-class-name: com.mysql.cj.jdbc.Driver # mysql对应驱动
+  task:
+    scheduling:
+      pool:
+        size: 5  # 定时任务线程池大小
 
 # mybatis-plus的配置
 mybatis-plus:
@@ -35,3 +39,16 @@ alipay:
   notifyUrl:  http://f82f57ab.natappfree.cc/alipay/notify
   #回调页面地址（支付完成后，会跳转回此页面）
   returnUrl: http://localhost:5173/my-orders
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: prometheus,health,info,metrics
+  endpoint:
+    prometheus:
+      enabled: true
+  metrics:
+    export:
+      prometheus:
+        enabled: true
