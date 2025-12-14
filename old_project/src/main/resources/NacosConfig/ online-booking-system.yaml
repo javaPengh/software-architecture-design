@@ -1,31 +1,49 @@
-# 数据源配置
+# server配置
+server:
+  port: 8080
+  servlet:
+    context-path: /
+# 连接池配置
 spring:
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
     druid:
       url: jdbc:mysql://localhost:3306/test
-      username: root
-      password: '123456'
-      driver-class-name: com.mysql.cj.jdbc.Driver
+      username: root # 改成你自己的账户名
+      password: '123456' # 改成你自己的密码
+      driver-class-name: com.mysql.cj.jdbc.Driver # mysql对应驱动
 
-# MyBatis Plus配置
+# mybatis-plus的配置
 mybatis-plus:
   type-aliases-package: org.zzu.pojo
   global-config:
     db-config:
-      logic-delete-field: isDeleted
-      id-type: auto
-
-# JWT配置
+      logic-delete-field: isDeleted  #全局逻辑删除
+      id-type: auto #主键策略自增长
+#jwt配置
 jwt:
   token:
-    tokenExpiration: 1440
-    tokenSignKey: onlineSystem
-
-# 支付宝沙箱配置
+    tokenExpiration: 1440 #有效时间,单位分钟
+    tokenSignKey: onlineSystem  #当前程序签名秘钥 自定义
+#支付宝沙箱配置
 alipay:
   appId: 9021000140641075
   appPrivateKey: MIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQC3sKszdL5aNaZjZFitya1kcU7vYmUkVOD21+x+xJ92dfcG+H+0JzeJ5y0reblcFEC5GScNK9hKYTDl0d5Ebf9p3S/CPa5Vj5B3BFu8+Y/5Z0h16IDBcCGpgR3QEf7LAMOtFRrjbwwPxST6mCoIwj88pZhZzsJEGRG0YJhO99vE6dGLoRi7L8TK6VEr4GDdwd+F8j1zvkWNVGP2BiXHOfYNax9/BCWLhFkgbdM+ZhhXr6zSKkBqJ1F196kLCHRa6Ycb9+9IKnZVR2/U+WNrQ5PfaZgU4IIM8g6xI0oFpXCT8wPSQdK8JijFnZmNI5vCvdTSje0jqakPgcZvtuAmK/BTAgMBAAECggEAF713guD1sQb6CCJx65QDGtYiE4It/DIUGRLy97dFvLOmR3paVtgyr1n3VoUW1bWwX7vGdkdSXtqMzUcAaOumdPInN/1syJYTX65qhNPkLaGRlduEuHtbfmK3jaqluWrR3064+OfjMS6Thueflx4zugzU0daM+Owcg6lwRdR2zM4K6Etom9TjMdA6+fz9eVoyM68zXEoFYhBNktUwW86zgLTD437aTG/uenFFCPeontIhx9Jsqyxf3U4uYTqC6PtqKw27PDvGsjGgBO9gBR9hu8tBrp9ckdEkuRt682O0i6eBpu8gE9jAiXBI6k9vclaLcf3XR82tGlxHIXndsHzcMQKBgQDyHC3HWolyoco8st5owVQ6xtSJ4UC9XDYEHuJj39bYw34JkTHltjKVEcAJ29q8EqeJauJwpAeC6JkK4LLxMoZyXXAbGGVfBavuF8IwqBW7CV6unKjOnrdKM4CNufzrx6aCrDoGpUA0BH3wKmYgKGaQYyPXV19Z4+qu/h1QR55ivQKBgQDCOnzm49amGkS3MZ5tMJFSW9EkUwm46TG6mZR1SQpGl9YY4hJkPqynJs4z8t/wxwi5f7IQxLPQb5Epk+kvJkLyspCVzf5twODlOH0bxuJxEhlBEDbhCJ/CymY5hNKnReuBYIVwevnkfOmrmrR7uws6v0njVYpMBp1F0LdEeqzYTwKBgQCIPnNEjB5s877rCX0/VgwgR2Ozc58K8Kk1CGw95+jvcpOqrpp1umIcoTCAW8hrrdO58PwchzHy6RG2nVwVf2lJUmuT09a38mkeQyB0YSJZbpxphp84JvjeOL1PBCrgRCnfvyuoMbY/j4ePb0ypLBMLjb7Nn814uFmIwFeepa7rwQKBgQDCLNTXw6nBL3vJJar8AFUYYECrLvUGTuPvaEDaLGZAguWAxOqcG2hiR1JY7xPg1CqtwLLVPsGBvTgDuCKkh3zgw5H2ohUdxnlPz/SLg364id6DhGFJAmUtyUj/cgFjR2yVUFi3Rcp0GklFzQlotWsZlUmaI9d6ABbVSD8gEACi0wKBgFR5pYg4dTEfAWBMaFjqXO2LgJTHSI9qy2zXj4k5f79U2BiL0VcpHM/VPyH0hlxhVTUMH+N3sWlPW/7dpgjMBkZbY/wPuer9+TAgaGXfcUAAens8Cl1LGa4s1jJPmM5ZytY6cybVdOMlG1vvoG2D1mJ2Pf5qg7/ipfRBR3tjroz1
   alipayPublicKey: MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAj82sb2HTLeYI2axnKLamx3FSqDSEtJm+8pkyFg1CJ9vSbEM8IonqMxUUSQDWQObSHi8WcPe1zvpDaluokvJIA5L9c6EUcZeZnoSuCcdX2DPcl84BjhL2FNPTeDNGGbw1vuMdRF16oktC4Phf+sIoqaQSt5eiWZEBoV6MSUiOW/2BviAJhWbc7v5iDa/QhGvgYiqj/31ogBig6Jb45CQzodyx12o8uHfved2glGa9CdiulNVZdjhGcfSPkGpw4ex3v9r9/XPmpRYK2lDeTm9Al1AgS1KVkMb+tMWYbBWtOX3LLnC6MLe+akWHFG8I0Uc5krUGnxDQ5FM5DKQlmr4nMQIDAQAB
-  notifyUrl: http://f82f57ab.natappfree.cc/alipay/notify
+  # 支付成功回调地址（http://f82f57ab.natappfree.cc地址是localhost:8080映射到公网上的地址，启动时要修改为当前你自己选用的地址,注意映射的端口号一定要为8080，否则notify不执行）
+  notifyUrl:  http://f82f57ab.natappfree.cc/alipay/notify
+  #回调页面地址（支付完成后，会跳转回此页面）
   returnUrl: http://localhost:5173/my-orders
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: prometheus,health,info,metrics
+  endpoint:
+    prometheus:
+      enabled: true
+  metrics:
+    export:
+      prometheus:
+        enabled: true
