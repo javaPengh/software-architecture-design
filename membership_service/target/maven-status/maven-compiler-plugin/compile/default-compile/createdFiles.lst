@@ -1,0 +1,8 @@
+org\zzu\membership\controller\MembershipController.class
+org\zzu\membership\security\SimpleRealm.class
+org\zzu\MembershipServiceApplication.class
+org\zzu\membership\dto\LoginRequest.class
+org\zzu\membership\mapper\MembershipMapper.class
+org\zzu\membership\service\MembershipService.class
+org\zzu\membership\controller\AuthController.class
+org\zzu\membership\config\ShiroConfig.class

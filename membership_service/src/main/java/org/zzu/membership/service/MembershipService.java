@@ -17,4 +17,13 @@ public class MembershipService {
         // 实际项目中应该调用mapper查询数据库
         return membershipMapper.isUserMember(userId);
     }
+
+    public boolean readTest(Long userId) {
+        return membershipMapper.isUserMember(userId);
+    }
+
+    public int writeTest(String note) {
+        membershipMapper.createTestTable();
+        return membershipMapper.insertWriteTest(note);
+    }
 }

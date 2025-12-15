@@ -2,6 +2,7 @@ package org.zzu.membership.controller;
 
 import com.alibaba.csp.sentinel.annotation.SentinelResource;
 import com.alibaba.csp.sentinel.slots.block.BlockException;
+import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.zzu.membership.service.MembershipService;
@@ -46,5 +47,22 @@ public class MembershipController {
     @GetMapping("/checkPing")
     public ResponseEntity<String> checkPing() {
         return ResponseEntity.ok("请求通的");
+    }
+
+    @GetMapping("/secure")
+    @RequiresRoles("member")
+    public ResponseEntity<String> memberOnly() {
+        return ResponseEntity.ok("member角色可访问");
+    }
+
+    @GetMapping("/rw/read/{userId}")
+    public ResponseEntity<Boolean> readTest(@PathVariable Long userId) {
+        return ResponseEntity.ok(membershipService.readTest(userId));
+    }
+
+    @PostMapping("/rw/write")
+    public ResponseEntity<Integer> writeTest(@RequestParam(defaultValue = "write-test") String note) {
+        int affected = membershipService.writeTest(note);
+        return ResponseEntity.ok(affected);
     }
 }
