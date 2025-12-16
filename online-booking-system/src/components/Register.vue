@@ -44,10 +44,14 @@ const validateUsername = async (rule, value, callback) => {
     let username=value;
     try {
       await request.post(`user/checkUsername/${username}`);
+      callback();
     } catch (error) {
-      callback(new Error('用户名已存在，请选择其他用户名'));
+      if (typeof error === 'string' && error.includes('用户名重复')) {
+        callback(new Error('用户名已存在，请选择其他用户名'));
+      } else {
+        callback(new Error('服务不可用，请稍后再试'));
+      }
     }
-    callback();
   }
 };
 

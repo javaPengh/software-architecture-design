@@ -13,7 +13,7 @@ export default defineConfig({
         rewrite: (path) => path.replace(/^\/api\/membership/, '/membership')
       },
       '/api': {
-        target: 'http://localhost:8082',
+        target: 'http://localhost:8080',
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, '')
       }
