@@ -12,4 +12,8 @@ public interface MembershipMapper {
      * @return 是否是会员
      */
     boolean isUserMember(@Param("userId") Long userId);
+
+    void createTestTable();
+
+    int insertWriteTest(@Param("note") String note);
 }

@@ -22,6 +22,38 @@
         <dependency>
             <groupId>com.alibaba.cloud</groupId>
             <artifactId>spring-cloud-starter-alibaba-sentinel</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.alibaba.csp</groupId>
+                    <artifactId>sentinel-web-servlet</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <!-- Apache Shiro (Jakarta) - 手动集成，避免 starter 与 Boot3 不兼容 -->
+        <dependency>
+            <groupId>org.apache.shiro</groupId>
+            <artifactId>shiro-spring</artifactId>
+            <version>2.0.0</version>
+            <classifier>jakarta</classifier>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.shiro</groupId>
+            <artifactId>shiro-web</artifactId>
+            <version>2.0.0</version>
+            <classifier>jakarta</classifier>
+        </dependency>
+        <!-- 为兼容部分第三方组件在运行时反射 javax.servlet.Filter -->
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>4.0.1</version>
+            <scope>provided</scope>
+        </dependency>
+        <!-- ShardingSphere JDBC Driver (Spring Boot 3 推荐方式) -->
+        <dependency>
+            <groupId>org.apache.shardingsphere</groupId>
+            <artifactId>shardingsphere-jdbc</artifactId>
+            <version>5.5.2</version>
         </dependency>
     </dependencies>
 

@@ -32,7 +32,11 @@ export const useUserStore = defineStore('user', {
                 this.isAdmin = false;
             }
 
-            await this.getUserInfo();
+            try {
+                await this.getUserInfo();
+            } catch (e) {
+                // 本地开发环境可能未启动 Redis，忽略 getUserInfo 失败
+            }
         },
         async changePassword(oldPwd, newPwd) {
             const data = {

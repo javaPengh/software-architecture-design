@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.zzu.mapper.TicketMapper">
+
+    <resultMap id="BaseResultMap" type="ticket">
+        <id property="tid" column="tid" jdbcType="INTEGER"/>
+        <result property="sid" column="sid" jdbcType="INTEGER"/>
+        <result property="uid" column="uid" jdbcType="INTEGER"/>
+        <result property="seatNumber" column="seat_number" jdbcType="INTEGER"/>
+        <result property="purchaseTime" column="purchase_time" jdbcType="TIMESTAMP"/>
+        <result property="price" column="price" jdbcType="DECIMAL"/>
+        <result property="orderStatus" column="order_status" jdbcType="OTHER"/>
+        <result property="version" column="version" jdbcType="INTEGER"/>
+        <result property="isDeleted" column="is_deleted" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        tid,sid,uid,
+        seat_number,purchase_time,price,
+        order_status,version,is_deleted
+    </sql>
+    <update id="updateOrderStatus">
+        UPDATE ticket t
+        JOIN screening s ON t.sid = s.sid
+        SET t.order_status = '已完成', t.version = t.version + 1
+        WHERE
+        t.uid = #{id}
+        AND s.show_time &lt; NOW()
+        AND t.order_status = '已支付'
+        AND t.is_deleted = 0
+        AND s.is_deleted = 0
+    </update>
+    <select id="showOrders" resultType="ticketDto">
+        SELECT
+        ticket.order_status,
+        ticket.price,
+        ticket.purchase_time,
+        screening.show_time,
+        screening.end_time,
+        ticket.seat_number,
+        movie.mname,
+        hall.hname,
+        ticket.tid
+        FROM
+        ticket
+        INNER JOIN
+        screening
+        ON
+        ticket.sid = screening.sid
+        INNER JOIN
+        movie
+        ON
+        screening.mid = movie.mid
+        INNER JOIN
+        hall
+        ON
+        screening.hid = hall.hid
+        WHERE
+        ticket.uid = #{portalVo.id}
+        <if test="portalVo.orderStatus != null">
+            AND ticket.order_status = #{portalVo.orderStatus}
+        </if>
+        AND ticket.is_deleted = 0
+        ORDER BY purchase_time DESC
+    </select>
+</mapper>

@@ -1,0 +1,33 @@
+# Nacos开关配置
+nacos:
+  enabled: true  # 设置为true启用Nacos，false禁用Nacos
+
+spring:
+  application:
+    name: online-booking-system
+  profiles:
+    active: dev
+  config:
+    import: optional:nacos:datasource.yml
+  cloud:
+    nacos:
+      enabled: ${nacos.enabled:false}  # 使用开关控制
+      discovery:
+        enabled: ${nacos.enabled:false}
+        server-addr: localhost:8848
+        namespace: 7c7a284f-7987-484f-b5b1-8ab31111f2b0
+      config:
+        enabled: ${nacos.enabled:false}
+        server-addr: localhost:8848
+        file-extension: yaml
+        group: DEFAULT_GROUP
+        namespace: 7c7a284f-7987-484f-b5b1-8ab31111f2b0
+        import-check:
+          enabled: false
+    # Sentinel 配置
+    sentinel:
+      transport:
+        dashboard: localhost:8858  # Sentinel 控制台地址
+      eager: true  # 立即加载 Sentinel 控制台
+    loadbalancer:
+      enabled: true
