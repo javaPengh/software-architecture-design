@@ -36,22 +36,33 @@ logging:
 # 原有的数据库、JWT等配置将会从Nacos配置中心获取
 # 数据源配置
 spring:
-  datasource:
-    type: com.alibaba.druid.pool.DruidDataSource
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://desktop-7nla9nf.taila5d3f3.ts.net:3306/onlinebooking_system
-    username: root
-    password: '123456'
+#  datasource:
+#    type: com.alibaba.druid.pool.DruidDataSource
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+#    url: jdbc:mysql://localhost:3307/onlinebooking_system
+#    username: root
+#    password: '123456'
+  elasticsearch:
+    uris: https://localhost:9200  # ES 8.x默认是HTTPS，不是HTTP
+    username: elastic  # 8.x默认用户是elastic
+    password: 123456  # 从ES容器日志中获取的初始密码
+    connection-timeout: 10s
+    socket-timeout: 10s
+  task:
+    scheduling:
+      pool:
+        size: 5  # 定时任务线程池大小
+
 
   rabbitmq:
-    host: desktop-7nla9nf.taila5d3f3.ts.net
+    host: localhost
     port: 5672
     username: guest
     password: guest
 
   data:
     redis:
-      host: desktop-7nla9nf.taila5d3f3.ts.net     # Redis 服务器地址，本地通常是 localhost
+      host: localhost    # Redis 服务器地址，本地通常是 localhost
       port: 6379          # Redis 服务器端口，默认是 6379
       password:           # 如果您的 Redis 设置了密码，请在这里填写
       database: 0         # 使用的 Redis 数据库索引，默认是 0
@@ -77,3 +88,17 @@ alipay:
   alipayPublicKey: MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAj82sb2HTLeYI2axnKLamx3FSqDSEtJm+8pkyFg1CJ9vSbEM8IonqMxUUSQDWQObSHi8WcPe1zvpDaluokvJIA5L9c6EUcZeZnoSuCcdX2DPcl84BjhL2FNPTeDNGGbw1vuMdRF16oktC4Phf+sIoqaQSt5eiWZEBoV6MSUiOW/2BviAJhWbc7v5iDa/QhGvgYiqj/31ogBig6Jb45CQzodyx12o8uHfved2glGa9CdiulNVZdjhGcfSPkGpw4ex3v9r9/XPmpRYK2lDeTm9Al1AgS1KVkMb+tMWYbBWtOX3LLnC6MLe+akWHFG8I0Uc5krUGnxDQ5FM5DKQlmr4nMQIDAQAB
   notifyUrl: http://f82f57ab.natappfree.cc/alipay/notify
   returnUrl: http://localhost:5173/my-orders
+
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: prometheus,health,info,metrics
+  endpoint:
+    prometheus:
+      enabled: true
+  metrics:
+    export:
+      prometheus:
+        enabled: true

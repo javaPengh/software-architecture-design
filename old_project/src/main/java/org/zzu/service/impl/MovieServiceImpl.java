@@ -13,6 +13,8 @@ import org.zzu.utils.TransPage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.Serializable;
+
 /**
  * @description 针对表【movie】的数据库操作Service实现
  */
@@ -21,6 +23,7 @@ public class MovieServiceImpl extends ServiceImpl<MovieMapper, Movie>
         implements MovieService {
     @Autowired
     private MovieMapper movieMapper;
+
 
     @Override
     public Result showMovieList(PortalVo portalVo) {
@@ -34,6 +37,7 @@ public class MovieServiceImpl extends ServiceImpl<MovieMapper, Movie>
         }
         return TransPage.PageListTOJSON(page, "movieList");
     }
+
 }
 
 

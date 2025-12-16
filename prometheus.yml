@@ -10,4 +10,5 @@ scrape_configs:
     # metrics_path defaults to /metrics
     # scheme defaults to http.
     static_configs:
-      - targets: ['localhost:9090'] # 抓取 Prometheus 自身服务，端口 9090
+      - targets: ['host.docker.internal:8080' ] # 抓取 Prometheus 自身服务，端口 9090
+    metrics_path: '/actuator/prometheus'

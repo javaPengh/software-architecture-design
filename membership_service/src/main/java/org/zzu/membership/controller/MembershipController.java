@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import org.zzu.membership.service.MembershipService;
 
 @RestController
-@RequestMapping("/membership")
+@RequestMapping("/api/membership")
 public class MembershipController {
 
     private final MembershipService membershipService;

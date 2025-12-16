@@ -5,7 +5,7 @@ spring:
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://desktop-7nla9nf.taila5d3f3.ts.net:3306/onlinebooking_system
+    url: jdbc:mysql://localhost:3307/onlinebooking_system
     username: root
     password: '123456'
 

@@ -72,7 +72,8 @@ public class SecurityConfig {
                                 "/api/public/**",
                                 "/swagger-ui/**",
                                 "/v3/api-docs/**",
-                                "/static/**"
+                                "/static/**",
+                                "/actuator/**"
                         ).permitAll()
                         // 放行所有OPTIONS请求
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()

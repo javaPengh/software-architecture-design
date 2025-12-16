@@ -2,6 +2,7 @@ package org.zzu.controller;
 
 import cn.hutool.captcha.CaptchaUtil;
 import cn.hutool.captcha.LineCaptcha;
+import io.micrometer.core.instrument.MeterRegistry;
 import jakarta.servlet.http.HttpServletRequest; // 合并：需要引入 request 来获取验证码
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +19,6 @@ import org.zzu.pojo.User;
 import org.zzu.service.UserService;
 import org.zzu.utils.*;
 import lombok.extern.slf4j.Slf4j;
-
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -39,6 +39,8 @@ public class UserController {
     private AuthenticationManager authenticationManager;
     @Autowired
     private RedisTemplate<String, Object> redisTemplate;
+    @Autowired
+    private MeterRegistry meterRegistry;
 
 
     @PostMapping("login")
@@ -78,6 +80,7 @@ public class UserController {
         data.put("role", loginUser.getType());
         data.put("nickname", loginUser.getNickname());
 
+        meterRegistry.counter("user.login.success").increment();
         return Result.ok(data);
     }
 
