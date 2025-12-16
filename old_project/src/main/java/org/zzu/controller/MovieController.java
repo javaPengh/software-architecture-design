@@ -2,7 +2,7 @@ package org.zzu.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import org.zzu.pojo.Movie;
-import org.zzu.pojo.PortalVo;
+import org.zzu.vo.PortalVo;
 import org.zzu.service.MovieService;
 import org.zzu.utils.Result;
 import org.zzu.utils.ResultCodeEnum;

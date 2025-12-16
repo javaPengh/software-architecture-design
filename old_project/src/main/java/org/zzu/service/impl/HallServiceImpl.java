@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.zzu.pojo.Hall;
-import org.zzu.pojo.PortalVo;
+import org.zzu.vo.PortalVo;
 import org.zzu.service.HallService;
 import org.zzu.mapper.HallMapper;
 import org.zzu.utils.Result;

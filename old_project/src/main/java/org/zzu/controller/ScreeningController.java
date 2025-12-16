@@ -1,7 +1,7 @@
 package org.zzu.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import org.zzu.pojo.PortalVo;
+import org.zzu.vo.PortalVo;
 import org.zzu.pojo.Screening;
 import org.zzu.service.ScreeningService;
 import org.zzu.utils.Result;

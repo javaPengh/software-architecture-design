@@ -22,7 +22,7 @@
         show_time,end_time,price,remaining_seats,seat_count,
         version,is_deleted
     </sql>
-    <select id="getScreeningDtoList" resultType="screeningDto">
+    <select id="getScreeningDtoList" resultType="org.zzu.dto.ScreeningDto">
         SELECT s.sid, m.mname, h.hname, s.show_time, s.end_time, s.price, s.seat_count, s.remaining_seats,
         h.row_capacity
         FROM screening s

@@ -1,6 +1,6 @@
 package org.zzu.service;
 
-import org.zzu.pojo.PortalVo;
+import org.zzu.vo.PortalVo;
 import org.zzu.pojo.Ticket;
 import com.baomidou.mybatisplus.extension.service.IService;
 import org.zzu.utils.Result;

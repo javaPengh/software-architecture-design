@@ -8,6 +8,8 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.zzu.mapper.ScreeningMapper;
 import org.zzu.pojo.*;
+import org.zzu.vo.PortalVo;
+import org.zzu.dto.TicketDto;
 import org.zzu.service.MembershipService;
 import org.zzu.service.TicketService;
 import org.zzu.mapper.TicketMapper;
@@ -42,18 +44,12 @@ public class TicketServiceImpl extends ServiceImpl<TicketMapper, Ticket>
         fallback = "ticketBuyFallback"
     )
     public void buy(Ticket ticket) {
-        // 检查用户是否是会员
         boolean isMember = membershipService.isUserMember(ticket.getUid());
-        
-        // 设置订单状态
         if (isMember) {
-            // 会员免支付
             ticket.setOrderStatus("已支付");
-            ticket.setPrice(BigDecimal.ZERO);  // 会员免费
+            ticket.setPrice(BigDecimal.ZERO);
         } else {
-            // 非会员需要支付
             ticket.setOrderStatus("待支付");
-            // 这里假设票价为固定值，实际应该从场次信息中获取
             ticket.setPrice(new BigDecimal("50.00"));
         }
         

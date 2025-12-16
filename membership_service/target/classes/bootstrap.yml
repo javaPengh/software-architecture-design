@@ -1,6 +1,6 @@
 # Nacos开关配置
 nacos:
-  enabled: false
+  enabled: true  # 设置为true启用Nacos，false禁用Nacos
 
 spring:
   application:
@@ -15,13 +15,13 @@ spring:
       discovery:
         enabled: ${nacos.enabled:false}
         server-addr: ${NACOS_HOST:localhost}:${NACOS_PORT:8848}
-        namespace: 7c7a284f-7987-484f-b5b1-8ab31111f2b0
+        namespace: 8db855e6-fa7d-4338-aa94-23e582d754c1
       config:
         enabled: ${nacos.enabled:false}
         server-addr: ${spring.cloud.nacos.discovery.server-addr}
         file-extension: yaml
         group: DEFAULT_GROUP
-        namespace: 7c7a284f-7987-484f-b5b1-8ab31111f2b0
+        namespace: 8db855e6-fa7d-4338-aa94-23e582d754c1
         import-check:
           enabled: false
     # Sentinel 配置

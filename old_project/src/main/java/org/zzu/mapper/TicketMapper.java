@@ -4,10 +4,10 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Param;
-import org.zzu.pojo.PortalVo;
+import org.zzu.vo.PortalVo;
 import org.zzu.pojo.Ticket;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import org.zzu.pojo.TicketDto;
+import org.zzu.dto.TicketDto;
 import java.time.LocalDateTime;
 
 /**

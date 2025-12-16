@@ -15,15 +15,12 @@ org\zzu\config\ScheduleConfig.class
 org\zzu\pojo\Ticket.class
 org\zzu\service\MembershipService.class
 org\zzu\service\ScreeningService.class
-org\zzu\pojo\PortalVo.class
-org\zzu\pojo\ScreeningDto.class
 org\zzu\controller\ScreeningController.class
 org\zzu\service\impl\ScreeningServiceImpl.class
 org\zzu\service\UserService.class
 org\zzu\utils\TransPage.class
 org\zzu\SpringbootHeadlineApplication.class
 org\zzu\mapper\TicketMapper.class
-org\zzu\pojo\ChangePasswordDto.class
 org\zzu\fliter\LoginProtectInterceptor.class
 org\zzu\service\MovieService.class
 org\zzu\config\RedisConfig.class
@@ -35,7 +32,6 @@ org\zzu\feign\MembershipFeignClient.class
 org\zzu\service\HallService.class
 org\zzu\utils\ResultCodeEnum.class
 org\zzu\config\FeignConfig.class
-org\zzu\pojo\LoginDto.class
 org\zzu\controller\HallController.class
 org\zzu\controller\AlipayController.class
 org\zzu\pojo\Hall.class
@@ -51,4 +47,3 @@ org\zzu\mapper\HallMapper.class
 org\zzu\service\OrderCleanupService.class
 org\zzu\service\OrderMessageSender.class
 org\zzu\utils\ControllerLoggingAspect.class
-org\zzu\pojo\TicketDto.class

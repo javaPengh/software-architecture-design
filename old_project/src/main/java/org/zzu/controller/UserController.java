@@ -13,8 +13,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.zzu.fliter.JwtAuthenticationFilter;
-import org.zzu.pojo.ChangePasswordDto;
-import org.zzu.pojo.LoginDto;
+import org.zzu.dto.ChangePasswordDto;
+import org.zzu.dto.LoginDto;
 import org.zzu.pojo.User;
 import org.zzu.service.UserService;
 import org.zzu.utils.*;
@@ -41,6 +41,8 @@ public class UserController {
     private RedisTemplate<String, Object> redisTemplate;
     @Autowired
     private MeterRegistry meterRegistry;
+    @org.springframework.beans.factory.annotation.Value("${auth.redis.enabled:true}")
+    private boolean redisEnabled;
 
 
     @PostMapping("login")
@@ -59,21 +61,30 @@ public class UserController {
         Authentication authenticate;
         try {
             authenticate = authenticationManager.authenticate(authenticationToken);
+        } catch (org.springframework.security.authentication.BadCredentialsException e) {
+            return Result.build(null, ResultCodeEnum.PASSWORD_ERROR);
+        } catch (org.springframework.security.core.userdetails.UsernameNotFoundException e) {
+            return Result.build(null, ResultCodeEnum.USERNAME_ERROR);
         } catch (Exception e) {
-            // 登录失败，可能是用户名或密码错误
-            return Result.build(null, ResultCodeEnum.USERNAME_ERROR); // 或 PASSWORD_ERROR
+            return Result.build(null, ResultCodeEnum.SYSTEM_ERROR);
         }
 
         User loginUser = (User) authenticate.getPrincipal();
 
         String token = jwtHelper.createToken(Long.valueOf(loginUser.getUid()));
 
-        redisTemplate.opsForValue().set(
-                JwtAuthenticationFilter.REDIS_LOGIN_KEY_PREFIX + loginUser.getUid(),
-                token,
-                jwtHelper.getTokenExpiration(),
-                TimeUnit.MINUTES
-        );
+        if (redisEnabled) {
+            try {
+                redisTemplate.opsForValue().set(
+                        JwtAuthenticationFilter.REDIS_LOGIN_KEY_PREFIX + loginUser.getUid(),
+                        token,
+                        jwtHelper.getTokenExpiration(),
+                        TimeUnit.MINUTES
+                );
+            } catch (Exception e) {
+                // 开发环境 Redis 不可用时，跳过
+            }
+        }
 
         Map<String, Object> data = new HashMap<>();
         data.put("token", token);

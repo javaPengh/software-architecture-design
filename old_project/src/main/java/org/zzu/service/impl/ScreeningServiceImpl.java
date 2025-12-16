@@ -8,6 +8,8 @@ import org.zzu.mapper.HallMapper;
 import org.zzu.mapper.MovieMapper;
 import org.zzu.mapper.TicketMapper;
 import org.zzu.pojo.*;
+import org.zzu.vo.PortalVo;
+import org.zzu.dto.ScreeningDto;
 import org.zzu.service.ScreeningService;
 import org.zzu.mapper.ScreeningMapper;
 import org.zzu.utils.Result;

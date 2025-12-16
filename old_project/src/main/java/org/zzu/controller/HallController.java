@@ -2,7 +2,7 @@ package org.zzu.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import org.zzu.pojo.Hall;
-import org.zzu.pojo.PortalVo;
+import org.zzu.vo.PortalVo;
 import org.zzu.service.HallService;
 import org.zzu.utils.Result;
 import org.zzu.utils.ResultCodeEnum;

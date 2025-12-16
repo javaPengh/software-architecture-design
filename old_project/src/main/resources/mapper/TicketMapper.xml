@@ -32,7 +32,7 @@
         AND t.is_deleted = 0
         AND s.is_deleted = 0
     </update>
-    <select id="showOrders" resultType="ticketDto">
+    <select id="showOrders" resultType="org.zzu.dto.TicketDto">
         SELECT
         ticket.order_status,
         ticket.price,

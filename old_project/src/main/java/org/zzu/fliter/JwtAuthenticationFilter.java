@@ -15,6 +15,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import org.zzu.mapper.UserMapper; // <-- 1. 添加 UserMapper 的 import
 import org.zzu.pojo.User;
 import org.zzu.utils.JwtHelper;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.io.IOException;
 
@@ -35,6 +36,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private UserMapper userMapper; // <-- 2. 在这里注入 UserMapper
 
     public static final String REDIS_LOGIN_KEY_PREFIX = "login:uid:";
+    @Value("${auth.redis.enabled:true}")
+    private boolean redisEnabled;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -59,10 +62,16 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             return;
         }
 
-        String redisToken = (String) redisTemplate.opsForValue().get(REDIS_LOGIN_KEY_PREFIX + userId);
-        if(StringUtils.isEmpty(redisToken) || !redisToken.equals(token)){
-            filterChain.doFilter(request, response);
-            return;
+        if (redisEnabled) {
+            try {
+                String redisToken = (String) redisTemplate.opsForValue().get(REDIS_LOGIN_KEY_PREFIX + userId);
+                if (StringUtils.isEmpty(redisToken) || !redisToken.equals(token)) {
+                    filterChain.doFilter(request, response);
+                    return;
+                }
+            } catch (Exception e) {
+                // 开发环境下 Redis 不可用时，降级为直接使用 JWT
+            }
         }
 
         // 5. 获取用户信息 (已修正)

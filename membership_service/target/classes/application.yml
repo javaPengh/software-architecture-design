@@ -1,16 +1,13 @@
 server:
-  port: 8081
+  port: 8081  # 使用不同的端口
 
 spring:
   datasource:
-    driver-class-name: org.apache.shardingsphere.driver.ShardingSphereDriver
-    url: jdbc:shardingsphere:classpath:sharding.yaml
-  cloud:
-    nacos:
-      config:
-        enabled: false
-      discovery:
-        enabled: false
+    type: com.alibaba.druid.pool.DruidDataSource
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3307/onlinebooking_system
+    username: root
+    password: '123456'
 
 # MyBatis 配置
 mybatis:
