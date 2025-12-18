@@ -8,6 +8,7 @@ import Screening from "../components/Screening.vue";
 import Movie from '../components/Movie.vue';
 import Hall from '../components/Hall.vue';
 import Captcha from '../components/Captcha.vue';
+import MovieSearch from '../components/MovieSearch.vue';
 import { useUserStore } from '../store/userStore';
 import { ElMessage } from 'element-plus';
 
@@ -21,6 +22,7 @@ const routes = [
   { path: '/ticket-search', component: TicketSearch },
   { path: '/my-orders', component: MyOrders },
   { path: '/movie', component: Movie },
+  { path: '/movie-search', component: MovieSearch },
   { path: '/hall', component: Hall },
   { path: '/screening', component: Screening }
 ];

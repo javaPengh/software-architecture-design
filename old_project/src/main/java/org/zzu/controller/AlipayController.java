@@ -28,7 +28,6 @@ import java.util.Map;
 // 沙箱账号：iwytqr1851@sandbox.com
 @RestController
 @RequestMapping("/alipay")
-@CrossOrigin
 @Slf4j
 public class AlipayController {
 
@@ -114,7 +113,6 @@ public class AlipayController {
             return "failure";
         }
 
-        ticket.setPurchaseTime(new Date());
         ticket.setOrderStatus("已支付");
         int rows = ticketMapper.updateById(ticket);
         System.out.println(rows > 0 ? "订单更新成功" : "订单更新失败");

@@ -10,7 +10,7 @@ import org.zzu.utils.Result;
 */
 public interface TicketService extends IService<Ticket> {
 
-    void buy(Ticket ticket);
+    void buy(Ticket ticket) throws Exception;
 
     Result showOrders(PortalVo uid);
 

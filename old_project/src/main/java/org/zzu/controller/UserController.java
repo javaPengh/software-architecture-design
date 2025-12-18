@@ -26,7 +26,6 @@ import java.util.concurrent.TimeUnit;
 
 @RestController
 @RequestMapping("user")
-@CrossOrigin
 @Slf4j
 public class UserController {
     private final static String SESSION_KEY = "Captcha";
@@ -138,7 +137,6 @@ public class UserController {
 
 
     @GetMapping("captcha")
-    @CrossOrigin(origins = "*", exposedHeaders = SESSION_KEY)
     public void generateCaptcha(HttpServletResponse response) throws IOException {
         log.info("✅ 收到验证码请求，Session ID");
         // 1. 设置响应头为图片类型

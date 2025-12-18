@@ -30,6 +30,11 @@
             我的订单
           </template>
         </el-menu-item>
+        <el-menu-item index="1-3" @click="navigateTo('/movie-search')">
+          <template #title>
+            电影搜索
+          </template>
+        </el-menu-item>
       </el-sub-menu>
     </el-menu>
   </el-scrollbar>

@@ -15,9 +15,9 @@ public class OrderCleanupService {
     private TicketMapper ticketMapper; // 改为 TicketMapper
 
     /**
-     * 定时任务：每分钟检查一次，清理2分钟内未付款的订单
+     * 定时任务：每2分钟检查一次，清理2分钟内未付款的订单
      */
-    @Scheduled(cron = "0 */1 * * * ?")
+    @Scheduled(cron = "0 */2 * * * ?")
     public void cleanupUnpaidOrders() {
         try {
             log.info("开始清理超过2分钟未付款的电影票订单...");

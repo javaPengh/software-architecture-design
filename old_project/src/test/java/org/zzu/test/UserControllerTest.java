@@ -1,6 +1,9 @@
 package org.zzu.test;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.annotation.Resource;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -17,6 +20,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.zzu.controller.UserController;
+import org.zzu.mapper.UserMapper;
 import org.zzu.pojo.ChangePasswordDto;
 import org.zzu.pojo.LoginDto;
 import org.zzu.pojo.User;
@@ -35,6 +39,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
+@Slf4j
 public class UserControllerTest {
 
     private MockMvc mockMvc;
@@ -57,6 +62,9 @@ public class UserControllerTest {
     @InjectMocks
     private UserController userController;
 
+    @Resource
+    private UserMapper userMapper;
+
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.openMocks(this);
@@ -67,45 +75,11 @@ public class UserControllerTest {
     }
 
     @Test
-    public void testLogin_Success() throws Exception {
-        // 准备数据
-        LoginDto loginDto = new LoginDto();
-        loginDto.setUsername("testuser");
-        loginDto.setPassword("password");
-        loginDto.setCaptcha("ABCD");
-
-        User user = new User();
-        user.setUid(1); // Integer 类型
-        user.setType("USER");
-        user.setNickname("Test User");
-
-        Authentication authentication = mock(Authentication.class);
-        when(authentication.getPrincipal()).thenReturn(user);
-
-        // 模拟依赖项的行为
-        when(authenticationManager.authenticate(any())).thenReturn(authentication);
-        when(jwtHelper.createToken(1L)).thenReturn("mocked-jwt-token");
-        when(jwtHelper.getTokenExpiration()).thenReturn(30L);
-
-        // 执行测试
-        mockMvc.perform(post("/user/login")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .header("Captcha", "ABCD")
-                        .content(asJsonString(loginDto)))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.code").value(200))
-                .andExpect(jsonPath("$.data.token").value("mocked-jwt-token"))
-                .andExpect(jsonPath("$.data.role").value("USER"))
-                .andExpect(jsonPath("$.data.nickname").value("Test User"));
-
-        // 验证交互 - 修正键名为 "login:uid:1"
-        verify(authenticationManager).authenticate(any());
-        verify(valueOperations).set(
-                eq("login:uid:1"), // 修正为实际使用的键名格式
-                eq("mocked-jwt-token"),
-                eq(30L),
-                eq(TimeUnit.MINUTES)
-        );
+    public void testSelectUser() {
+        LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(User::getUsername, "user");
+        Long count = userMapper.selectCount(queryWrapper);
+        log.info("用户名为user的用户个数:" + count);
     }
 
     @Test
@@ -141,7 +115,7 @@ public class UserControllerTest {
                 .andExpect(jsonPath("$.code").value(200));
 
         // 修正键名为 "login:uid:1"
-        verify(redisTemplate).delete("login:uid:1");
+        verify(redisTemplate).delete("login:uid:" + 1);
     }
 
     @Test

@@ -18,7 +18,6 @@ import java.util.stream.Collectors;
  */
 @RestController
 @RequestMapping("ticket")
-@CrossOrigin
 public class TicketController {
 
     @Autowired
@@ -55,10 +54,14 @@ public class TicketController {
         try {
             ticketService.buy(ticket);
         } catch (Exception e) {
-            //返回购票失败的提示
+            // 如果是座位被占用的情况，返回特定错误码
+            if (e.getMessage() != null && e.getMessage().contains("该座位已被占用")) {
+                return Result.build(null, ResultCodeEnum.SEAT_OCCUPIED);
+            }
+            // 其他异常返回购票失败
             result = Result.build(null, ResultCodeEnum.TICKET_BOOKED_FAILED);
         }
-        //返回成功结果
+        // 返回成功结果
         return result;
     }
 

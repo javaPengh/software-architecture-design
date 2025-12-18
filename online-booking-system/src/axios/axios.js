@@ -6,6 +6,7 @@ import {ElMessage} from "element-plus";
 //  创建instance实例
 const instance = axios.create({
     baseURL:'/api/'
+    // baseURL: 'http://localhost:8080/'
 })
 window.captcha = null; // 初始化为空
 var captcha = '';
@@ -37,10 +38,15 @@ instance.interceptors.response.use(
         NProgress.done()//关闭进度条
         // 判断请求 是否为获取验证码请求，如果是则将获取的验证码对应的文本保存到全局变量captcha
         const headers = response.headers;
-        if(headers.captcha != null){
-            //获取后端在响应头中设置的验证码
-            captcha = headers.captcha
-            // console.log(response)
+        // 1. 优先放行验证码 Header 逻辑 (解决大小写兼容)
+        if (headers.captcha || headers.Captcha) {
+            captcha = headers.captcha || headers.Captcha;
+            return response; // 验证码接口返回完整 response
+        }
+
+        // 2. 【核心新增】如果是 Blob 二进制流，直接返回 response
+        // 因为 Blob 对象没有 .code 属性，必须在业务逻辑判断前拦截
+        if (response.data instanceof Blob) {
             return response;
         }
         if(response.data.code !== 200){
@@ -55,8 +61,10 @@ instance.interceptors.response.use(
             else if (response.data.code === 509) return  Promise.reject(ElMessage.error("删除失败"))
             else if (response.data.code === 510) return  Promise.reject(ElMessage.error("验证码有误"))
             else if (response.data.code === 511) return  Promise.reject(ElMessage.error("放映场次时间冲突"))
+            else if (response.data.code === 513) return  Promise.reject(ElMessage.error("座位已被占用，请选择其他座位"))
         } else {
-            return response.data.data; /* 返回成功响应数据中的data属性数据 */
+            // 只有当响应成功时才返回数据
+            return response.data.data;
         }
     },
     (error) => {

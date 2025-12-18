@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
  */
 @RestController
 @RequestMapping("hall")
-@CrossOrigin
 public class HallController {
 
     @Autowired

@@ -21,7 +21,8 @@ public enum ResultCodeEnum {
     UPDATE_FAILED(508, "updateFailed"),
     DELETE_FAILED(509, "deleteFailed"),
     CAPTCHA_ERROR(510, "captchaError"),
-    SCREENING_CONFLICT(511, "screeningConflict");
+    SCREENING_CONFLICT(511, "screeningConflict"),
+    SEAT_OCCUPIED(513, "seatOccupied");
 
     private final Integer code;
     private final String message;
@@ -36,4 +37,3 @@ public enum ResultCodeEnum {
         return message;
     }
 }
-

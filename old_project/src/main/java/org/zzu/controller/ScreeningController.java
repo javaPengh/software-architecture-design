@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
  */
 @RestController
 @RequestMapping("screening")
-@CrossOrigin
 public class ScreeningController {
 
     @Autowired

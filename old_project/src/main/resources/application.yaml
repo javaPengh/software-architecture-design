@@ -20,6 +20,12 @@ feign:
     response:
       enabled: true
 
+# zookeeper配置
+zookeeper:
+  connect-string: localhost:2181
+  session-timeout: 5000
+  connection-timeout: 5000
+
 # application.yml
 logging:
   level:
@@ -43,11 +49,11 @@ spring:
 #    username: root
 #    password: '123456'
   elasticsearch:
-    uris: https://localhost:9200  # ES 8.x默认是HTTPS，不是HTTP
-    username: elastic  # 8.x默认用户是elastic
-    password: 123456  # 从ES容器日志中获取的初始密码
-    connection-timeout: 10s
-    socket-timeout: 10s
+    uris: http://localhost:9200  # ES 8.x默认是HTTPS，不是HTTP
+#    username: elastic  # 8.x默认用户是elastic
+#    password: 123456  # 从ES容器日志中获取的初始密码
+    connection-timeout: 5s
+    socket-timeout: 5s
   task:
     scheduling:
       pool:
